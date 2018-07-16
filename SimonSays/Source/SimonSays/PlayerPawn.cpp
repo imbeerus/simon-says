@@ -31,3 +31,11 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+void APlayerPawn::DisableSimonInput()
+{
+}
+
+void APlayerPawn::EnableSimonInput()
+{
+}

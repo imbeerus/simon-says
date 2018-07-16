@@ -6,7 +6,17 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerPawn.generated.h"
 
-UCLASS(hideCategories = ("Rendering", "Replication", "Actor"))
+
+UENUM()
+enum class EGameState : uint8
+{
+	Win,
+	Lose,
+	Guess_Turn,
+	Player_Turn
+};
+
+UCLASS(hideCategories = ("Rendering", "Replication", "Actor", "Pawn"))
 class SIMONSAYS_API APlayerPawn : public APawn
 {
 	GENERATED_BODY()
@@ -25,5 +35,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable)
+	void DisableSimonInput();
+
+	UFUNCTION(BlueprintCallable)
+	void EnableSimonInput();
 
 };

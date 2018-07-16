@@ -7,6 +7,7 @@
 #include "SimonButton.generated.h"
 
 class UMaterial;
+class USoundWave;
 /**
  * 
  */
@@ -21,4 +22,18 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Materials")
 	UMaterial* ButtonGlowElement;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Setup")
+	USoundWave* PlaySound;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Setup")
+	bool IsTurnedOn;
+
+	UFUNCTION(BlueprintCallable)
+	void TurnOn();
+
+private:
+	void TurnOff();
+
+	void TurnOffWithDelay(float DelaySeconds);
 };
