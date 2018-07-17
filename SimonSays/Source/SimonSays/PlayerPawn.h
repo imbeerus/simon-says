@@ -6,15 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerPawn.generated.h"
 
-
-UENUM()
-enum class EGameState : uint8
-{
-	Win,
-	Lose,
-	Guess_Turn,
-	Player_Turn
-};
+class USimonButton;
 
 UCLASS(hideCategories = ("Rendering", "Replication", "Actor", "Pawn"))
 class SIMONSAYS_API APlayerPawn : public APawn
@@ -37,9 +29,21 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	void DisableSimonInput();
+	void ShowDefaultCursor();
 
 	UFUNCTION(BlueprintCallable)
-	void EnableSimonInput();
+	void ShowHandCursor();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayButton(USimonButton* ButtonToPlay);
+
+	UFUNCTION()
+	void TurnOffButton(USimonButton* SimonButton);
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool IsSomeButtonPlaying = false;
+
+private:
+	FTimerHandle TimerHandle;
 
 };

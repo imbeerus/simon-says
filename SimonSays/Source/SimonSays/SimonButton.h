@@ -8,6 +8,7 @@
 
 class UMaterial;
 class USoundWave;
+
 /**
  * 
  */
@@ -17,24 +18,17 @@ class SIMONSAYS_API USimonButton : public UStaticMeshComponent
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Materials")
+	UPROPERTY(EditDefaultsOnly, Category = "Materials")
 	UMaterial* ButtonElement;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Materials")
+	UPROPERTY(EditDefaultsOnly, Category = "Materials")
 	UMaterial* ButtonGlowElement;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Setup")
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* PlaySound;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Setup")
-	bool IsTurnedOn;
-
-	UFUNCTION(BlueprintCallable)
+	void TurnOff();
 	void TurnOn();
 
-	UFUNCTION()
-	void TurnOff();
-private:
-
-	void TurnOffWithDelay(float DelaySeconds);
+	float GetDuration();
 };
