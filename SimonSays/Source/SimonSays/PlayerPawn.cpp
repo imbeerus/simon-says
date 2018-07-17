@@ -3,6 +3,7 @@
 #include "PlayerPawn.h"
 #include "SimonButton.h"
 #include "TimerManager.h"
+#include "Classes/GameFramework/PlayerController.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()

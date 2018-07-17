@@ -7,6 +7,7 @@
 #include "PlayerPawn.generated.h"
 
 class USimonButton;
+class APlayerController;
 
 UCLASS(hideCategories = ("Rendering", "Replication", "Actor", "Pawn"))
 class SIMONSAYS_API APlayerPawn : public APawn
