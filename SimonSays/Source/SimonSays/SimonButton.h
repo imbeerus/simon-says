@@ -32,8 +32,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void TurnOn();
 
-private:
+	UFUNCTION()
 	void TurnOff();
+private:
 
 	void TurnOffWithDelay(float DelaySeconds);
 };
