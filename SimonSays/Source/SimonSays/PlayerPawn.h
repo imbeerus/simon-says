@@ -38,13 +38,33 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayButton(USimonButton* ButtonToPlay);
 
+	UFUNCTION(BlueprintCallable)
+	void StartTimerCount();
+
 	UFUNCTION()
 	void TurnOffButton(USimonButton* SimonButton);
+
+	UFUNCTION()
+	void CheckTimerValue();
 	
+	// Timer value for for beginning of the game
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	float StartTimerValue = 10;
+
+	// Value that will be added to the timer count at the next level of game difficult
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	float PlusTimerValue = 5;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool IsSomeButtonPlaying = false;
 
 private:
-	FTimerHandle TimerHandle;
+	float TimerCount;
+
+	FTimerHandle ButtonTimerHandle;
+	FTimerHandle CountdownTimerHandle;
+
+	void StartTimerCount(float SecondsCount);
+
 
 };
