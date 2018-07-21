@@ -7,6 +7,7 @@
 #include "PlayerPawn.generated.h"
 
 class USimonButton;
+class USoundWave;
 class APlayerController;
 
 UCLASS(hideCategories = ("Rendering", "Replication", "Actor", "Pawn"))
@@ -22,12 +23,21 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialise(TArray<USimonButton*> ButtonsToSet);
+
+	UFUNCTION(BlueprintCallable)
+	void StartGame();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetGame();
 
 	UFUNCTION(BlueprintCallable)
 	void ShowDefaultCursor();
@@ -38,33 +48,42 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayButton(USimonButton* ButtonToPlay);
 
-	UFUNCTION(BlueprintCallable)
-	void StartTimerCount();
+	UFUNCTION(BlueprintCallable, Category = "Turn")
+	void AddToPlayerSequence(USimonButton* PressedButton);
 
 	UFUNCTION()
 	void TurnOffButton(USimonButton* SimonButton);
 
-	UFUNCTION()
+	UFUNCTION(Category = "Timer")
 	void CheckTimerValue();
-	
+
 	// Timer value for for beginning of the game
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	float StartTimerValue = 10;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Timer")
+	float StartTimerValue = 60;
 
-	// Value that will be added to the timer count at the next level of game difficult
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	float PlusTimerValue = 5;
-
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "Turn")
 	bool IsSomeButtonPlaying = false;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	USoundWave* WinSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	USoundWave* LoseSound;
+
 private:
+	APlayerController* FirstPlayerController;
+	TArray<USimonButton*> SequenceArray;
+	TArray<USimonButton*> ButtonsArray;
+	FTimerHandle ButtonHandle;
+	FTimerHandle CountdownHandle;
+	float TurnCount;
 	float TimerCount;
 
-	FTimerHandle ButtonTimerHandle;
-	FTimerHandle CountdownTimerHandle;
-
+	void EnablePlayerInput();
+	void DisablePlayerInput();
+	void GameOver();
+	void ShowChallengeSequence();
+	void ResetTimerCount();
 	void StartTimerCount(float SecondsCount);
-
-
+	void PlayButton(USimonButton* ButtonToPlay, bool IsPlayer);
 };
