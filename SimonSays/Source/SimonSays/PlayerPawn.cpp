@@ -35,52 +35,55 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void APlayerPawn::Initialise(TArray<USimonButton*> ButtonsToSet)
-{
-	ButtonsArray = ButtonsToSet;
-}
+void APlayerPawn::Initialise(TArray<USimonButton*> ButtonsToSet) { ButtonsArray = ButtonsToSet; }
 
 void APlayerPawn::StartGame()
 {
-	StartTimerCount(StartTimerValue);
+	// TODO: Add check ButtonsArray
+
+	// Adding random button to sequence
+	ResetGame();
+	ShowChallengeSequence();
 }
 
 void APlayerPawn::ResetGame()
 {
 	TurnCount = 0;
+	SequenceArray.Empty();
+	AddRandomButtonToSequence();
 }
 
-void APlayerPawn::EnablePlayerInput() { FirstPlayerController->bEnableClickEvents = false; }
-void APlayerPawn::DisablePlayerInput() { FirstPlayerController->bEnableClickEvents = true; }
+void APlayerPawn::EnablePlayerInput() { FirstPlayerController->bEnableClickEvents = true; }
 
-void APlayerPawn::GameOver()
-{
-	// GetWorld()->GetTimerManager().ClearTimer(CountdownHandle);
-}
+void APlayerPawn::DisablePlayerInput() { FirstPlayerController->bEnableClickEvents = false; }
 
 void APlayerPawn::ShowDefaultCursor() { FirstPlayerController->CurrentMouseCursor = EMouseCursor::Type::Default; }
+
 void APlayerPawn::ShowHandCursor() { FirstPlayerController->CurrentMouseCursor = EMouseCursor::Type::Hand; }
 
-void APlayerPawn::PlayButton(USimonButton* ButtonToPlay) { PlayButton(ButtonToPlay, true); }
+void APlayerPawn::AddRandomButtonToSequence() { SequenceArray.Add(ButtonsArray[FMath::RandRange(0.f, 4.f)]); }
 
-void APlayerPawn::PlayButton(USimonButton* ButtonToPlay, bool IsPlayer)
-{
-	if (IsPlayer)
-	{
-		IsSomeButtonPlaying = true;
-		FTimerDelegate TimerDel;
-		TimerDel.BindUFunction(this, FName("TurnOffButton"), ButtonToPlay);
-		GetWorld()->GetTimerManager().SetTimer(ButtonHandle, TimerDel, ButtonToPlay->GetDuration(), false);
-		ButtonToPlay->TurnOn();
-	}
+void APlayerPawn::PlayButton(USimonButton* ButtonToPlay) {
+	ButtonToPlay->TurnOn();
+	IsSomeButtonPlaying = true;
+	FTimerDelegate TimerDel;
+	TimerDel.BindUFunction(this, FName("TurnOffButton"), ButtonToPlay);
+	GetWorld()->GetTimerManager().SetTimer(ButtonHandle, TimerDel, ButtonToPlay->GetDuration(), false);
 }
 
 void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 {
 	TurnCount++;
-	if (ButtonsArray[TurnCount] != PressedButton)
+	bool IsSameButton = SequenceArray[TurnCount] == PressedButton;
+
+	if (!IsSameButton)
 	{
-		GameOver();
+		// Game over
+	} 
+	else if (IsSameButton && TurnCount == SequenceArray.Num())
+	{
+		AddRandomButtonToSequence();
+		ShowChallengeSequence();
 	}
 }
 
@@ -93,13 +96,31 @@ void APlayerPawn::TurnOffButton(USimonButton* SimonButton)
 
 void APlayerPawn::ShowChallengeSequence()
 {
-	// USimonButton* RandomButton = ButtonsArray[FMath::RandRange(0, 4)];
-	// SequenceArray.Add(RandomButton);
+	// DisablePlayerInput();
 
-	// Play buttons every second
+	TurnCount = 0;
+	FTimerDelegate TimerDel;
+	TimerDel.BindUFunction(this, FName("PlayChallengeButtons"));
+	GetWorld()->GetTimerManager().SetTimer(TurnHandle, TimerDel, 1.f, true); // Test
 }
 
-void APlayerPawn::ResetTimerCount() { TimerCount = StartTimerValue; }
+void APlayerPawn::PlayChallengeButtons()
+{
+	PlayButton(SequenceArray[TurnCount]);
+	if (++TurnCount == SequenceArray.Num())
+	{
+		TurnCount = -1; // Because we need 0 at PlayButton
+		StartTimerCount(StartTimerValue);
+		EnablePlayerInput();
+
+		GetWorldTimerManager().ClearTimer(TurnHandle);
+	}
+}
+
+void APlayerPawn::StopTimerCount() {
+	TimerCount = StartTimerValue; 
+	GetWorldTimerManager().ClearTimer(CountdownHandle);
+}
 
 void APlayerPawn::StartTimerCount(float SecondsCount)
 {
@@ -112,11 +133,11 @@ void APlayerPawn::StartTimerCount(float SecondsCount)
 
 void APlayerPawn::CheckTimerValue()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Count value: %f"), TimerCount);
 	// Once we've called this function enough times, check count value
 	if (--TimerCount <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Time is over"));
 		GetWorldTimerManager().ClearTimer(CountdownHandle);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Count value: %f"), TimerCount);
 }

@@ -19,10 +19,10 @@ class SIMONSAYS_API USimonButton : public UStaticMeshComponent
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Materials")
-	UMaterial* ButtonElement;
+	UMaterial* DefaultMaterial;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Materials")
-	UMaterial* ButtonGlowElement;
+	UMaterial* GlowMaterial;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* PlaySound;

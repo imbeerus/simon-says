@@ -7,7 +7,7 @@
 
 void USimonButton::TurnOn()
 {
-	SetMaterial(0, ButtonGlowElement);
+	SetMaterial(0, GlowMaterial);
 	UGameplayStatics::PlaySoundAtLocation(
 		GetWorld(),
 		PlaySound,
@@ -15,12 +15,6 @@ void USimonButton::TurnOn()
 	);
 }
 
-void USimonButton::TurnOff()
-{
-	SetMaterial(0, ButtonElement);
-}
+void USimonButton::TurnOff() { SetMaterial(0, DefaultMaterial); }
 
-float USimonButton::GetDuration()
-{
-	return PlaySound->Duration;
-}
+float USimonButton::GetDuration() {	return PlaySound->Duration; }

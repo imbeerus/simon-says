@@ -48,6 +48,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayButton(USimonButton* ButtonToPlay);
 
+	UFUNCTION(BlueprintCallable) 
+	void ShowChallengeSequence();
+
+	UFUNCTION()
+	void PlayChallengeButtons();
+
 	UFUNCTION(BlueprintCallable, Category = "Turn")
 	void AddToPlayerSequence(USimonButton* PressedButton);
 
@@ -76,14 +82,13 @@ private:
 	TArray<USimonButton*> ButtonsArray;
 	FTimerHandle ButtonHandle;
 	FTimerHandle CountdownHandle;
+	FTimerHandle TurnHandle;
 	float TurnCount;
 	float TimerCount;
 
-	void EnablePlayerInput();
-	void DisablePlayerInput();
-	void GameOver();
-	void ShowChallengeSequence();
-	void ResetTimerCount();
+	void EnablePlayerInput(); // For player turn 
+	void DisablePlayerInput(); // For challenge turn 
+	void AddRandomButtonToSequence();
+	void StopTimerCount();
 	void StartTimerCount(float SecondsCount);
-	void PlayButton(USimonButton* ButtonToPlay, bool IsPlayer);
 };
