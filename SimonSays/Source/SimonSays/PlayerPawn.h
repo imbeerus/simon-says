@@ -61,6 +61,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Timer")
 	float StartTimerValue = 60;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Turn")
+	bool IsInputEnabled;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* WinSound;
 

@@ -5,6 +5,7 @@
 #include "TimerManager.h"
 #include "Classes/Sound/SoundWave.h"
 #include "Classes/GameFramework/PlayerController.h"
+#include "Classes/Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 
 // Sets default values
@@ -53,10 +54,6 @@ void APlayerPawn::ResetGame()
 	AddRandomButtonToSequence();
 }
 
-void APlayerPawn::EnablePlayerInput() { FirstPlayerController->bEnableClickEvents = true; }
-
-void APlayerPawn::DisablePlayerInput() { FirstPlayerController->bEnableClickEvents = false; }
-
 void APlayerPawn::ShowDefaultCursor() { FirstPlayerController->CurrentMouseCursor = EMouseCursor::Type::Default; }
 
 void APlayerPawn::ShowHandCursor() { FirstPlayerController->CurrentMouseCursor = EMouseCursor::Type::Hand; }
@@ -67,11 +64,20 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 {
 	TurnCount++;
 	bool IsSameButton = SequenceArray[TurnCount] == PressedButton;
-
 	if (!IsSameButton)
 	{
-		// Game over
-	} 
+		ResetGame();
+		if (LoseSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				GetWorld(),
+				LoseSound,
+				GetActorLocation()
+			);
+		}
+
+		ShowChallengeSequence();
+	}
 	else if (IsSameButton && (TurnCount == SequenceArray.Num() - 1))
 	{
 		AddRandomButtonToSequence();
@@ -81,25 +87,23 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 
 void APlayerPawn::ShowChallengeSequence()
 {
-	// DisablePlayerInput();
-
+	IsInputEnabled = false;
 	TurnCount = 0;
+	StopTimerCount();
+
 	FTimerDelegate TimerDel;
 	TimerDel.BindUFunction(this, FName("PlayChallengeButtons"));
-	GetWorld()->GetTimerManager().SetTimer(TurnHandle, TimerDel, 1.f, true);
-
+	GetWorld()->GetTimerManager().SetTimer(TurnHandle, TimerDel, 1.5f, true);
 }
 
 void APlayerPawn::PlayChallengeButtons()
 {
 	SequenceArray[TurnCount]->Play();
-	UE_LOG(LogTemp, Warning, TEXT("TurnCount %f"), TurnCount);
-	UE_LOG(LogTemp, Warning, TEXT("SequenceArray %d"), SequenceArray.Num());
 	if (++TurnCount == SequenceArray.Num())
 	{
+		IsInputEnabled = true;
 		TurnCount = -1; // Because we need 0 at PlayButton
 		StartTimerCount(StartTimerValue);
-		EnablePlayerInput();
 
 		GetWorldTimerManager().ClearTimer(TurnHandle);
 	}
