@@ -27,8 +27,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* PlaySound;
 
+	UFUNCTION(BlueprintCallable)
+	void Play();
+
+	UFUNCTION()
 	void TurnOff();
+
 	void TurnOn();
 
 	float GetDuration();
+
+private:
+	FTimerHandle ButtonHandle;
 };

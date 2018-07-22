@@ -45,9 +45,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ShowHandCursor();
 
-	UFUNCTION(BlueprintCallable)
-	void PlayButton(USimonButton* ButtonToPlay);
-
 	UFUNCTION(BlueprintCallable) 
 	void ShowChallengeSequence();
 
@@ -57,18 +54,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Turn")
 	void AddToPlayerSequence(USimonButton* PressedButton);
 
-	UFUNCTION()
-	void TurnOffButton(USimonButton* SimonButton);
-
 	UFUNCTION(Category = "Timer")
 	void CheckTimerValue();
 
 	// Timer value for for beginning of the game
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Timer")
 	float StartTimerValue = 60;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Turn")
-	bool IsSomeButtonPlaying = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* WinSound;
@@ -80,7 +71,6 @@ private:
 	APlayerController* FirstPlayerController;
 	TArray<USimonButton*> SequenceArray;
 	TArray<USimonButton*> ButtonsArray;
-	FTimerHandle ButtonHandle;
 	FTimerHandle CountdownHandle;
 	FTimerHandle TurnHandle;
 	float TurnCount;

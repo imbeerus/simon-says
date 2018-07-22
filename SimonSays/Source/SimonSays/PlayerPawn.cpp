@@ -63,14 +63,6 @@ void APlayerPawn::ShowHandCursor() { FirstPlayerController->CurrentMouseCursor =
 
 void APlayerPawn::AddRandomButtonToSequence() { SequenceArray.Add(ButtonsArray[FMath::RandRange(0.f, 4.f)]); }
 
-void APlayerPawn::PlayButton(USimonButton* ButtonToPlay) {
-	ButtonToPlay->TurnOn();
-	IsSomeButtonPlaying = true;
-	FTimerDelegate TimerDel;
-	TimerDel.BindUFunction(this, FName("TurnOffButton"), ButtonToPlay);
-	GetWorld()->GetTimerManager().SetTimer(ButtonHandle, TimerDel, ButtonToPlay->GetDuration(), false);
-}
-
 void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 {
 	TurnCount++;
@@ -80,18 +72,11 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 	{
 		// Game over
 	} 
-	else if (IsSameButton && TurnCount == SequenceArray.Num())
+	else if (IsSameButton && (TurnCount == SequenceArray.Num() - 1))
 	{
 		AddRandomButtonToSequence();
 		ShowChallengeSequence();
 	}
-}
-
-void APlayerPawn::TurnOffButton(USimonButton* SimonButton)
-{
-	IsSomeButtonPlaying = false;
-	SimonButton->TurnOff();
-	GetWorld()->GetTimerManager().ClearTimer(ButtonHandle);
 }
 
 void APlayerPawn::ShowChallengeSequence()
@@ -101,12 +86,15 @@ void APlayerPawn::ShowChallengeSequence()
 	TurnCount = 0;
 	FTimerDelegate TimerDel;
 	TimerDel.BindUFunction(this, FName("PlayChallengeButtons"));
-	GetWorld()->GetTimerManager().SetTimer(TurnHandle, TimerDel, 1.f, true); // Test
+	GetWorld()->GetTimerManager().SetTimer(TurnHandle, TimerDel, 1.f, true);
+
 }
 
 void APlayerPawn::PlayChallengeButtons()
 {
-	PlayButton(SequenceArray[TurnCount]);
+	SequenceArray[TurnCount]->Play();
+	UE_LOG(LogTemp, Warning, TEXT("TurnCount %f"), TurnCount);
+	UE_LOG(LogTemp, Warning, TEXT("SequenceArray %d"), SequenceArray.Num());
 	if (++TurnCount == SequenceArray.Num())
 	{
 		TurnCount = -1; // Because we need 0 at PlayButton
