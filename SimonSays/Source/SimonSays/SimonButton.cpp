@@ -16,16 +16,12 @@ void USimonButton::Play() {
 void USimonButton::TurnOn()
 {
 	SetMaterial(0, GlowMaterial);
-	UGameplayStatics::PlaySoundAtLocation(
-		GetWorld(),
-		PlaySound,
-		GetComponentLocation()
-	);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), PlaySound, GetComponentLocation());
 }
 
 void USimonButton::TurnOff() {
-	SetMaterial(0, DefaultMaterial); 
+	SetMaterial(0, DefaultMaterial);
 	GetWorld()->GetTimerManager().ClearTimer(ButtonHandle);
 }
 
-float USimonButton::GetDuration() {	return PlaySound->Duration; }
+float USimonButton::GetDuration() { return PlaySound->Duration; }
