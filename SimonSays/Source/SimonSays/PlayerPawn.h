@@ -33,11 +33,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(TArray<USimonButton*> ButtonsToSet);
 
-	UFUNCTION(BlueprintCallable)
-	void StartGame();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void OnPlayerTurn();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void OnChallangeTurn();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void OnWrongButton(float TurnCount);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void OnTimeIsOver(float TurnCount);
 
 	UFUNCTION(BlueprintCallable)
-	void ResetGame();
+	void StartGame();
 
 	UFUNCTION(BlueprintCallable)
 	void ShowDefaultCursor();

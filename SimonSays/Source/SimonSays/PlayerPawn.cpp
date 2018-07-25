@@ -20,8 +20,8 @@ void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	TurnCount = 0;
+	IsInputEnabled = false;
 	FirstPlayerController = GetWorld()->GetFirstPlayerController();
-	// Display StartTimerValue
 }
 
 // Called every frame
@@ -43,15 +43,10 @@ void APlayerPawn::StartGame()
 	// TODO: Add check ButtonsArray
 
 	// Adding random button to sequence
-	ResetGame();
-	ShowChallengeSequence();
-}
-
-void APlayerPawn::ResetGame()
-{
 	TurnCount = 0;
 	SequenceArray.Empty();
 	AddRandomButtonToSequence();
+	ShowChallengeSequence();
 }
 
 void APlayerPawn::ShowDefaultCursor() { FirstPlayerController->CurrentMouseCursor = EMouseCursor::Type::Default; }
@@ -72,8 +67,7 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 		if (LoseSound) {
 			UGameplayStatics::PlaySoundAtLocation( GetWorld(), LoseSound, GetActorLocation() );
 		}
-		ResetGame();
-		ShowChallengeSequence();
+		OnWrongButton(TurnCount);
 	}
 	
 	if (IsSameButton && (TurnCount == SequenceArray.Num() - 1))	{
@@ -84,6 +78,8 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 
 void APlayerPawn::ShowChallengeSequence()
 {
+	OnChallangeTurn();
+
 	IsInputEnabled = false;
 	TurnCount = 0;
 	StopTimerCount();
@@ -98,10 +94,11 @@ void APlayerPawn::PlayChallengeButtons()
 	SequenceArray[TurnCount]->Play();
 	if (++TurnCount == SequenceArray.Num())
 	{
+		OnPlayerTurn();
+
 		IsInputEnabled = true;
 		TurnCount = -1; // Because we need 0 at PlayButton
 		StartTimerCount(StartTimerValue);
-
 		GetWorldTimerManager().ClearTimer(TurnHandle);
 	}
 }
@@ -122,11 +119,10 @@ void APlayerPawn::StartTimerCount(float SecondsCount)
 
 void APlayerPawn::CheckTimerValue()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Count value: %f"), TimerCount);
 	// Once we've called this function enough times, check count value
 	if (--TimerCount <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Time is over"));
+		OnTimeIsOver(TurnCount);
 		GetWorldTimerManager().ClearTimer(CountdownHandle);
 	}
 }
