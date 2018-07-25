@@ -6,8 +6,13 @@
 #include "Classes/Sound/SoundWave.h"
 #include "Classes/Kismet/GameplayStatics.h"
 
-void USimonButton::Play() {
+void USimonButton::Play() {	Play(true); }
+
+void USimonButton::Play(bool IsWithSound) {
 	TurnOn();
+	if (IsWithSound) {
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), PlaySound, GetComponentLocation(), Volume);
+	}
 	FTimerDelegate TimerDel;
 	TimerDel.BindUFunction(this, FName("TurnOff"));
 	GetWorld()->GetTimerManager().SetTimer(ButtonHandle, TimerDel, GetDuration(), false);
@@ -15,11 +20,12 @@ void USimonButton::Play() {
 
 void USimonButton::TurnOn()
 {
+	Push();
 	SetMaterial(0, GlowMaterial);
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), PlaySound, GetComponentLocation());
 }
 
 void USimonButton::TurnOff() {
+	UnPush();
 	SetMaterial(0, DefaultMaterial);
 	GetWorld()->GetTimerManager().ClearTimer(ButtonHandle);
 }

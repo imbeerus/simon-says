@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ButtonStaticMesh.h"
 #include "Components/StaticMeshComponent.h"
 #include "SimonButton.generated.h"
 
@@ -13,7 +14,7 @@ class USoundWave;
  * 
  */
 UCLASS(meta = (BlueprintSpawnableComponent))
-class SIMONSAYS_API USimonButton : public UStaticMeshComponent
+class SIMONSAYS_API USimonButton : public UButtonStaticMesh
 {
 	GENERATED_BODY()
 
@@ -27,8 +28,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* PlaySound;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float Volume = 1.f;
+
 	UFUNCTION(BlueprintCallable)
 	void Play();
+
+	void Play(bool IsWithSound);
 
 	UFUNCTION()
 	void TurnOff();

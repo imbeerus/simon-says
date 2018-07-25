@@ -64,22 +64,19 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 {
 	TurnCount++;
 	bool IsSameButton = SequenceArray[TurnCount] == PressedButton;
-	if (!IsSameButton)
-	{
-		ResetGame();
-		if (LoseSound)
-		{
-			UGameplayStatics::PlaySoundAtLocation(
-				GetWorld(),
-				LoseSound,
-				GetActorLocation()
-			);
+	if (IsSameButton) {
+		PressedButton->Play();
+	}
+	else {
+		PressedButton->Play(false); // Play button without sound
+		if (LoseSound) {
+			UGameplayStatics::PlaySoundAtLocation( GetWorld(), LoseSound, GetActorLocation() );
 		}
-
+		ResetGame();
 		ShowChallengeSequence();
 	}
-	else if (IsSameButton && (TurnCount == SequenceArray.Num() - 1))
-	{
+	
+	if (IsSameButton && (TurnCount == SequenceArray.Num() - 1))	{
 		AddRandomButtonToSequence();
 		ShowChallengeSequence();
 	}
@@ -93,7 +90,7 @@ void APlayerPawn::ShowChallengeSequence()
 
 	FTimerDelegate TimerDel;
 	TimerDel.BindUFunction(this, FName("PlayChallengeButtons"));
-	GetWorld()->GetTimerManager().SetTimer(TurnHandle, TimerDel, 1.5f, true);
+	GetWorld()->GetTimerManager().SetTimer(TurnHandle, TimerDel, DelayBetweenButtonsPressed, true);
 }
 
 void APlayerPawn::PlayChallengeButtons()

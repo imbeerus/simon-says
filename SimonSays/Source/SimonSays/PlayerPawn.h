@@ -70,6 +70,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* LoseSound;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DelayBetweenButtonsPressed = 1.25f;
+
 private:
 	APlayerController* FirstPlayerController;
 	TArray<USimonButton*> SequenceArray;
@@ -79,8 +82,6 @@ private:
 	float TurnCount;
 	float TimerCount;
 
-	void EnablePlayerInput(); // For player turn 
-	void DisablePlayerInput(); // For challenge turn 
 	void AddRandomButtonToSequence();
 	void StopTimerCount();
 	void StartTimerCount(float SecondsCount);
