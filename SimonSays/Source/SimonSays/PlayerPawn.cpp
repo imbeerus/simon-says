@@ -71,7 +71,6 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 			}
 			OnWrongButton(TurnCount);
 			IsInputEnabled = false;
-			return;
 		}
 
 		//  If last button was guessed then
