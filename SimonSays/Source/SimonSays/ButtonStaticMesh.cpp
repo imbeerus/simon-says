@@ -6,14 +6,15 @@ void UButtonStaticMesh::Push() {
 	if (!IsPushed) {
 		IsPushed = true;
 		StartLocation = GetComponentLocation();
-		FVector NewLocation = StartLocation - FVector(0, 0, PushOffset);
-		SetRelativeLocation(NewLocation);
+		StartLocation.Z -= PushOffset;
+		SetWorldLocation(StartLocation);
 	}
 }
 
 void UButtonStaticMesh::UnPush() {
 	if (IsPushed) {
 		IsPushed = false;
+		StartLocation.Z += PushOffset;
 		SetWorldLocation(StartLocation);
 	}
 }
