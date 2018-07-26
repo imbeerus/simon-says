@@ -57,22 +57,28 @@ void APlayerPawn::AddRandomButtonToSequence() { SequenceArray.Add(ButtonsArray[F
 
 void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 {
-	TurnCount++;
-	bool IsSameButton = SequenceArray[TurnCount] == PressedButton;
-	if (IsSameButton) {
-		PressedButton->Play();
-	}
-	else {
-		PressedButton->Play(false); // Play button without sound
-		if (LoseSound) {
-			UGameplayStatics::PlaySoundAtLocation( GetWorld(), LoseSound, GetActorLocation() );
+	if (SequenceArray.Num() > 0)
+	{
+		TurnCount++;
+		bool IsSameButton = SequenceArray[TurnCount] == PressedButton;
+		if (IsSameButton) {
+			PressedButton->Play();
 		}
-		OnWrongButton(TurnCount);
-	}
-	
-	if (IsSameButton && (TurnCount == SequenceArray.Num() - 1))	{
-		AddRandomButtonToSequence();
-		ShowChallengeSequence();
+		else {
+			PressedButton->Play(false); // Play button without sound
+			if (LoseSound) {
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), LoseSound, GetActorLocation());
+			}
+			OnWrongButton(TurnCount);
+			IsInputEnabled = false;
+			return;
+		}
+
+		//  If last button was guessed then
+		if (IsSameButton && (TurnCount == SequenceArray.Num() - 1)) {
+			AddRandomButtonToSequence(); // add new random button to challange sequence
+			ShowChallengeSequence(); // and show it
+		}
 	}
 }
 
@@ -91,15 +97,18 @@ void APlayerPawn::ShowChallengeSequence()
 
 void APlayerPawn::PlayChallengeButtons()
 {
-	SequenceArray[TurnCount]->Play();
-	if (++TurnCount == SequenceArray.Num())
+	if (SequenceArray.Num() > 0)
 	{
-		OnPlayerTurn();
+		SequenceArray[TurnCount]->Play();
+		if (++TurnCount == SequenceArray.Num())
+		{
+			OnPlayerTurn();
 
-		IsInputEnabled = true;
-		TurnCount = -1; // Because we need 0 at PlayButton
-		StartTimerCount(StartTimerValue);
-		GetWorldTimerManager().ClearTimer(TurnHandle);
+			IsInputEnabled = true;
+			TurnCount = -1; // Because we need 0 at PlayButton
+			StartTimerCount(StartTimerValue); // Start countdow for player turn
+			GetWorldTimerManager().ClearTimer(TurnHandle);
+		}
 	}
 }
 
@@ -123,6 +132,7 @@ void APlayerPawn::CheckTimerValue()
 	if (--TimerCount <= 0)
 	{
 		OnTimeIsOver(TurnCount);
+		IsInputEnabled = false;
 		GetWorldTimerManager().ClearTimer(CountdownHandle);
 	}
 }

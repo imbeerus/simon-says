@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "ButtonStaticMesh.h"
-#include "Components/StaticMeshComponent.h"
 #include "SimonButton.generated.h"
 
 class UMaterial;
