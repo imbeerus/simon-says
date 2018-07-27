@@ -57,7 +57,7 @@ void APlayerPawn::AddRandomButtonToSequence() { SequenceArray.Add(ButtonsArray[F
 
 void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 {
-	if (SequenceArray.Num() > 0)
+	if (IsInputEnabled && SequenceArray.Num() > 0)
 	{
 		TurnCount++;
 		bool IsSameButton = SequenceArray[TurnCount] == PressedButton;
@@ -75,6 +75,7 @@ void APlayerPawn::AddToPlayerSequence(USimonButton* PressedButton)
 
 		//  If last button was guessed then
 		if (IsSameButton && (TurnCount == SequenceArray.Num() - 1)) {
+			ScoreValue++; // increase score value
 			AddRandomButtonToSequence(); // add new random button to challange sequence
 			ShowChallengeSequence(); // and show it
 		}

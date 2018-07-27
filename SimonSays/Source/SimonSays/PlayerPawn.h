@@ -70,6 +70,17 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Timer")
 	float StartTimerValue = 60;
 
+	// Countdown value
+	UPROPERTY(BlueprintReadOnly, Category = "Timer")
+	float TimerCount;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Turn")
+	FString CurrentTurn;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Turn")
+	int ScoreValue = 0;
+
+	// Responsible for the fact that it is possible for a player to enter a sequence of buttons
 	UPROPERTY(BlueprintReadOnly, Category = "Turn")
 	bool IsInputEnabled;
 
@@ -79,6 +90,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	USoundWave* LoseSound;
 
+	// Delay between pressed buttons when chalange sequence is showed
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float DelayBetweenButtonsPressed = 1.25f;
 
@@ -88,8 +100,7 @@ private:
 	TArray<USimonButton*> ButtonsArray;
 	FTimerHandle CountdownHandle;
 	FTimerHandle TurnHandle;
-	float TurnCount;
-	float TimerCount;
+	float TurnCount = 0;
 
 	void AddRandomButtonToSequence();
 	void StopTimerCount();
