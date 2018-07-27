@@ -44,6 +44,7 @@ void APlayerPawn::StartGame()
 
 	// Adding random button to sequence
 	TurnCount = 0;
+	ScoreValue = 0;
 	SequenceArray.Empty();
 	AddRandomButtonToSequence();
 	ShowChallengeSequence();
