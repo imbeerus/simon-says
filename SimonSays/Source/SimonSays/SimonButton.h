@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ButtonStaticMesh.h"
+#include "PushableButton.h"
 #include "SimonButton.generated.h"
 
 class UMaterial;
@@ -13,10 +13,10 @@ class USoundWave;
  * 
  */
 UCLASS(meta = (BlueprintSpawnableComponent))
-class SIMONSAYS_API USimonButton : public UButtonStaticMesh
+class SIMONSAYS_API USimonButton : public UPushableButton
 {
 	GENERATED_BODY()
-
+	
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Materials")
 	UMaterial* DefaultMaterial;
