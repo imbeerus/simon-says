@@ -1,4 +1,10 @@
 # simon-says
-Implementation of the game "Simon" in Unreal Engine 4
 
-Simon is an electronic game of memory skill invented by Ralph H. Baer and Howard J. Morrison, with software programming by Lenny Cope. The device creates a series of tones and lights and requires a user to repeat the sequence. If the user succeeds, the series becomes progressively longer and more complex. Once the user fails or the time limit runs out, the game is over.
+### What?
+Implementation of the memory skill game "Simon" in [Unreal Engine 4](https://www.unrealengine.com/en-US/what-is-unreal-engine-4).
+
+### Support
+If you want to support the the project or show your appreciation feel free to **[buy me a beer / donate](https://www.paypal.me/kekc1304/1)**
+
+### Issue Tracking
+Found a bug? Have an idea for an improvement? Feel free to [add an issue](../../issues).
