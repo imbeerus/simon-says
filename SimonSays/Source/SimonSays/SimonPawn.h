@@ -47,10 +47,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartGame();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Utils")
 	void ShowDefaultCursor();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Utils")
 	void ShowHandCursor();
 
 	UFUNCTION()

@@ -1,7 +1,6 @@
 
 
 #include "SocialBlueprintFunctionLibrary.h"
-#include "GenericPlatform/GenericPlatformProcess.h"
 
 FString USocialBlueprintFunctionLibrary::BuildShareGoogleUrl(FString url, FString text)
 {
@@ -26,12 +25,11 @@ FString USocialBlueprintFunctionLibrary::BuildShareRedditUrl(FString url, FStrin
 	return BaseUrl;
 }
 
-FString USocialBlueprintFunctionLibrary::BuildShareTwitterUrl(FString url, FString text, FString via, FString hashtags)
+FString USocialBlueprintFunctionLibrary::BuildShareTwitterUrl(FString url, FString text, FString hashtags)
 {
 	FString BaseUrl = "https://twitter.com/intent/tweet?";
 	BaseUrl.Append("url=").Append(url);
 	BaseUrl.Append("&text=").Append(text);
-	BaseUrl.Append("&via=").Append(via);
 	BaseUrl.Append("&hashtags=").Append(hashtags);
 	return BaseUrl;
 }

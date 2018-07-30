@@ -14,18 +14,18 @@ class SIMONSAYS_API USocialBlueprintFunctionLibrary : public UBlueprintFunctionL
 {
 	GENERATED_BODY()
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Share")
 	static FString BuildShareGoogleUrl(FString url, FString text);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Share")
 	static FString BuildShareFacebookUrl(FString url);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Share")
 	static FString BuildShareRedditUrl(FString url, FString title);
 
-	UFUNCTION(BlueprintCallable)
-	static FString BuildShareTwitterUrl(FString url, FString text, FString via, FString hashtags);
+	UFUNCTION(BlueprintCallable, Category = "Share")
+	static FString BuildShareTwitterUrl(FString url, FString text, FString hashtags);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Share")
 	static FString BuildShareTelegramUrl(FString url, FString text);
 };
