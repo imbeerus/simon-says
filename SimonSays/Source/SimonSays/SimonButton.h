@@ -36,12 +36,21 @@ public:
 	void Play(bool IsWithSound);
 
 	UFUNCTION()
+	void TurnOn();
+	
+	UFUNCTION()
 	void TurnOff();
 
-	void TurnOn();
+	UFUNCTION(BlueprintCallable)
+	void Blink(float Duration);
+	
+	UFUNCTION()
+	void SwitchState();
 
 	float GetDuration();
 
 private:
 	FTimerHandle ButtonHandle;
+	FTimerHandle BlinkHandle;
+	bool IsBlinking = false;
 };
