@@ -38,7 +38,7 @@ public:
 	UFUNCTION()
 	void TurnOn();
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void TurnOff();
 
 	UFUNCTION(BlueprintCallable)
