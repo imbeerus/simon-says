@@ -4,9 +4,10 @@
 #include "TimerManager.h"
 #include "Classes/Materials/Material.h"
 #include "Classes/Sound/SoundWave.h"
+#include "Classes/Components/AudioComponent.h"
 #include "Classes/Kismet/GameplayStatics.h"
 
-void USimonButton::Play() { Play(true); }
+void USimonButton::Initialise(UAudioComponent* AudioComponentToSet) { AudioComponent = AudioComponentToSet; }
 
 void USimonButton::Play(bool IsWithSound) {
 	// Clear blink timer
@@ -14,8 +15,9 @@ void USimonButton::Play(bool IsWithSound) {
 	IsBlinking = false;
 
 	TurnOn();
-	if (IsWithSound && PlaySound != nullptr) {
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), PlaySound, GetComponentLocation(), Volume);
+	if (IsWithSound && AudioComponent != nullptr && SoundToPlay != nullptr) {
+		AudioComponent->SetSound(SoundToPlay);
+		AudioComponent->Play();
 	}
 	FTimerDelegate TimerDel;
 	TimerDel.BindUFunction(this, FName("TurnOff"));
@@ -30,6 +32,7 @@ void USimonButton::TurnOn()
 
 void USimonButton::TurnOff() {
 	UnPush();
+	if (AudioComponent != nullptr) { AudioComponent->Stop(); }
 	SetMaterial(0, DefaultMaterial);
 	GetWorld()->GetTimerManager().ClearTimer(ButtonHandle);
 }
@@ -57,8 +60,8 @@ void USimonButton::SwitchState()
 
 float USimonButton::GetDuration()
 {
-	if (PlaySound == nullptr) { return 0.1f; }
-	return PlaySound->Duration; 
+	if (SoundToPlay == nullptr) { return 0.1f; }
+	return SoundToPlay->Duration; 
 }
 
 

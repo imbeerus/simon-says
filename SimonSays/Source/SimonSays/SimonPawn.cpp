@@ -49,6 +49,8 @@ void ASimonPawn::AddToPlayerSequence(USimonButton* PressedButton)
 {
 	if (IsInputEnabled && SequenceArray.Num() > 0)
 	{
+		if (LastPlayedButton != nullptr) LastPlayedButton->TurnOff();
+
 		TurnCount++;
 		bool IsSameButton = SequenceArray[TurnCount] == PressedButton;
 
@@ -59,6 +61,7 @@ void ASimonPawn::AddToPlayerSequence(USimonButton* PressedButton)
 				UGameplayStatics::PlaySoundAtLocation(GetWorld(), LoseSound, GetActorLocation());
 			}
 
+			LastPlayedButton = nullptr;
 			DisableSimonInput();
 			StopTimerCount();
 			OnWrongButton(ScoreValue);
@@ -66,6 +69,7 @@ void ASimonPawn::AddToPlayerSequence(USimonButton* PressedButton)
 		}
 		else
 		{
+			LastPlayedButton = PressedButton;
 			PressedButton->Play();
 		}
 		

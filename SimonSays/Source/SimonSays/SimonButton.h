@@ -8,6 +8,7 @@
 
 class UMaterial;
 class USoundWave;
+class UAudioComponent;
 
 /**
  * 
@@ -25,15 +26,16 @@ public:
 	UMaterial* GlowMaterial;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	USoundWave* PlaySound;
+	USoundWave* SoundToPlay;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float Volume = 1.f;
 
-	UFUNCTION(BlueprintCallable)
-	void Play();
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialise(UAudioComponent* AudioComponentToSet);
 
-	void Play(bool IsWithSound);
+	UFUNCTION(BlueprintCallable)
+	void Play(bool IsWithSound = true);
 
 	UFUNCTION()
 	void TurnOn();
@@ -50,6 +52,7 @@ public:
 	float GetDuration();
 
 private:
+	UAudioComponent* AudioComponent;
 	FTimerHandle ButtonHandle;
 	FTimerHandle BlinkHandle;
 	bool IsBlinking = false;

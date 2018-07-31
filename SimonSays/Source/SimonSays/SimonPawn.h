@@ -96,6 +96,7 @@ public:
 private:
 	TArray<USimonButton*> SequenceArray;
 	TArray<USimonButton*> ButtonsArray;
+	USimonButton* LastPlayedButton = nullptr;
 	FTimerHandle CountdownHandle;
 	FTimerHandle TurnHandle;
 	float TurnCount = 0;
