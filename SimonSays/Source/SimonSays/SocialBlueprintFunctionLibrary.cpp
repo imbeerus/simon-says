@@ -10,13 +10,6 @@ FString USocialBlueprintFunctionLibrary::BuildShareGoogleUrl(FString url, FStrin
 	return BaseUrl;
 }
 
-FString USocialBlueprintFunctionLibrary::BuildShareFacebookUrl(FString url)
-{
-	FString BaseUrl = "https://www.facebook.com/sharer.php?";
-	BaseUrl.Append("u=").Append(url);
-	return BaseUrl;
-}
-
 FString USocialBlueprintFunctionLibrary::BuildShareRedditUrl(FString url, FString title)
 {
 	FString BaseUrl = "https://reddit.com/submit?";
@@ -31,13 +24,5 @@ FString USocialBlueprintFunctionLibrary::BuildShareTwitterUrl(FString url, FStri
 	BaseUrl.Append("url=").Append(url);
 	BaseUrl.Append("&text=").Append(text);
 	BaseUrl.Append("&hashtags=").Append(hashtags);
-	return BaseUrl;
-}
-
-FString USocialBlueprintFunctionLibrary::BuildShareTelegramUrl(FString url, FString text)
-{
-	FString BaseUrl = "https://t.me/share/url?";
-	BaseUrl.Append("url=").Append(url);
-	BaseUrl.Append("&text=").Append(url);
 	return BaseUrl;
 }
